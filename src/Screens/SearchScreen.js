@@ -16,12 +16,13 @@ const SearchScreen = () => {
       setIsLoading( 'Loading' );
       const response = await yelp.get('/search', {
         params: {
-          limit: 50,
+          limit: 10,
           term: searchTerm,
           location: 'san jose'
         }
       });
       setResults( response.data.businesses );
+      console.log(response.data.businesses)
       setIsLoading(null)
     } catch (err) {
       setErrorMessage( 'Something went wrong' );
