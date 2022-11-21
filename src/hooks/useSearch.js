@@ -29,7 +29,7 @@ export default () =>
   };
 
   useEffect(() => {
-    searchApi('pasta');
+    searchApi('mac');
   }, [] );
 	
 	return [searchApi, results, errorMessage, isLoading]

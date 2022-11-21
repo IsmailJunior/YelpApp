@@ -1,13 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import SearchDetail from "./SearchDetail";
 
 const SearchList = ({title, results}) =>
 {
 	return (
-		<View style={styles.view}>
+		<ScrollView  vertical contentContainerStyle={styles.conatiner}>
 			<Text style={ styles.title }>{ title }</Text>
-			<Text style={styles.text}>Results: {results.length}</Text>
-		</View>
+			<Text style={ styles.text }>Results: { results.length }</Text>
+			<FlatList horizontal
+				data={ results }
+				keyExtractor={ ( result ) => result.id }
+				renderItem={ ( { item } ) =>
+				{
+					return (
+						<SearchDetail result={ item} />
+					)
+				}}
+			/>
+		</ScrollView>
 	);
 };
 
@@ -20,7 +31,7 @@ const styles = StyleSheet.create( {
 	text: {
 		color: 'gray'
 	},
-	view: {
+	conatiner: {
 		alignItems: 'center'
 	}
 } );
