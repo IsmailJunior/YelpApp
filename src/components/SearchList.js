@@ -1,20 +1,28 @@
 import React from "react";
-import { Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { Text, StyleSheet, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { withNavigation } from "react-navigation";
 import SearchDetail from "./SearchDetail";
 
-const SearchList = ({title, results}) =>
+const SearchList = ({title, results, navigation}) =>
 {
+	if ( !results.length )
+	{
+		return null;
+	}
 	return (
-		<ScrollView  vertical contentContainerStyle={styles.conatiner}>
+		<ScrollView scrollEnabled={ false } contentContainerStyle={ styles.container }>
 			<Text style={ styles.title }>{ title }</Text>
-			<Text style={ styles.text }>Results: { results.length }</Text>
-			<FlatList horizontal
+			<FlatList
+				showsHorizontalScrollIndicator={false}
+				horizontal
 				data={ results }
 				keyExtractor={ ( result ) => result.id }
 				renderItem={ ( { item } ) =>
 				{
 					return (
-						<SearchDetail result={ item} />
+						<TouchableOpacity onPress={() => navigation.navigate('Show', {id: item.id})}>
+							<SearchDetail result={ item } />
+						</TouchableOpacity>
 					)
 				}}
 			/>
@@ -25,15 +33,16 @@ const SearchList = ({title, results}) =>
 const styles = StyleSheet.create( {
 	  title: {
     fontSize: 18,
-		fontWeight: 'bold',
-	margin: 10
+	fontWeight: 'bold',
+		marginLeft: 10,
+	marginBottom: 5
 	},
 	text: {
 		color: 'gray'
 	},
-	conatiner: {
-		alignItems: 'center'
+	container: {
+		marginBottom: 5
 	}
 } );
 
-export default SearchList;
+export default withNavigation(SearchList);

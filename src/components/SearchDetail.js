@@ -15,14 +15,14 @@ const SearchDetail = ({result}) =>
 const styles = StyleSheet.create( {
 	image: {
 		width: 250,
-		height: 120
+		height: 120,
 	},
 	name: {
 		fontWeight: 'bold',
+		marginTop: 5
 	},
 	view: {
 		marginLeft: 10,
-		padding: 5
 	}
 } );
 

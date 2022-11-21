@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import useSearch from '../hooks/useSearch';
 import SearchList from '../components/SearchList';
@@ -15,28 +15,31 @@ const SearchScreen = () => {
     } );
   }
   return (
-    <View style={ styles.view }>
+    <>
       <SearchBar
         term={term}
         onTermChange={setTerm}
         onTermSubmit={() => searchApi(term)}
       />
       {errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
-      <Text style={styles.text}>We have found {results.length} results</Text>
       { isLoading && <Text>{ isLoading }</Text> }
-      <SearchList results={filterResultsByPrice('$')} title='Cost Effective'/>
-      <SearchList results={ filterResultsByPrice( '$$' ) } title='Bit Pricer'/>
-      <SearchList results={ filterResultsByPrice( '$$$' ) } title='Big Spender'/>
-      </View>
+      <ScrollView>
+      <SearchList  results={filterResultsByPrice('$')} title='Cost Effective'/>
+      <SearchList  results={ filterResultsByPrice( '$$' ) } title='Bit Pricer'/>
+      <SearchList  results={ filterResultsByPrice( '$$$' ) } title='Big Spender' />
+        </ScrollView>
+      </>
   );
 };
 
 const styles = StyleSheet.create( {
   view: {
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 1,
+    flex: 1
   },
   text: {
-    margin: 15
+    margin: 5
   }
 });
 
