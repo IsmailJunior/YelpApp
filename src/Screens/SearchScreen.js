@@ -1,39 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import SearchBar from '../components/SearchBar';
-import yelp from '../api/yelp';
+import useSearch from '../hooks/useSearch';
+import SearchList from '../components/SearchList';
 
 const SearchScreen = () => {
   const [term, setTerm] = useState('');
-  const [results, setResults] = useState([]);
-  const [ errorMessage, setErrorMessage ] = useState( '' );
-  const [ isLoading, setIsLoading ] = useState( '' );
-
-  const searchApi = async searchTerm => {
-    console.log('Hi there!');
-    try
+  const [ searchApi, results, errorMessage, isLoading ] = useSearch();
+  const filterResultsByPrice = (price) =>
+  {
+    return results.filter( result =>
     {
-      setIsLoading( 'Loading' );
-      const response = await yelp.get('/search', {
-        params: {
-          limit: 10,
-          term: searchTerm,
-          location: 'san jose'
-        }
-      });
-      setResults( response.data.businesses );
-      console.log(response.data.businesses)
-      setIsLoading(null)
-    } catch (err) {
-      setErrorMessage( 'Something went wrong' );
-      console.log(err)
-    }
-  };
-
-  useEffect(() => {
-    searchApi('pasta');
-  }, []);
-
+      return result.price === price;
+    } );
+  }
   return (
     <View style={ styles.view }>
       <SearchBar
@@ -42,8 +22,11 @@ const SearchScreen = () => {
         onTermSubmit={() => searchApi(term)}
       />
       {errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
-      <Text>We have found {results.length} results</Text>
+      <Text style={styles.text}>We have found {results.length} results</Text>
       { isLoading && <Text>{ isLoading }</Text> }
+      <SearchList results={filterResultsByPrice('$')} title='Cost Effective'/>
+      <SearchList results={ filterResultsByPrice( '$$' ) } title='Bit Pricer'/>
+      <SearchList results={ filterResultsByPrice( '$$$' ) } title='Big Spender'/>
       </View>
   );
 };
@@ -51,6 +34,9 @@ const SearchScreen = () => {
 const styles = StyleSheet.create( {
   view: {
     alignItems: 'center'
+  },
+  text: {
+    margin: 15
   }
 });
 
